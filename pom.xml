@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>intopass</groupId>
-    <artifactId>java-work</artifactId>
+    <groupId>fuhaiwei</groupId>
+    <artifactId>bmoe2017</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
@@ -13,6 +13,16 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.34</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20150729</version>
         </dependency>
     </dependencies>
 
