@@ -37,6 +37,8 @@ public class RunTask {
             String output = handleData(current, data);
             writeText(output, new File(String.format("bmoe-data/%s.txt", datetime)));
         }
+
+        System.out.println("Done!");
     }
 
 }

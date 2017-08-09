@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class Handler {
 
@@ -102,6 +103,22 @@ public abstract class Handler {
             builder.append(" = ");
             builder.append(v);
             builder.append("\n");
+        });
+
+        Map<String, Integer> treeMap = new TreeMap<>((k1, k2) -> voteMap.get(k2) - voteMap.get(k1));
+        treeMap.putAll(voteMap);
+        System.out.print("====连记票分析====");
+        System.out.print("\n");
+        treeMap.forEach((k, v) -> {
+            String[] split = k.split(",");
+            String name1 = nameMap.get(Integer.parseInt(split[0]));
+            String name2 = nameMap.get(Integer.parseInt(split[1]));
+            System.out.print(name1);
+            System.out.print(" + ");
+            System.out.print(name2);
+            System.out.print(" = ");
+            System.out.print(v);
+            System.out.print("\n");
         });
 
         return builder.toString();
