@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class Handler {
@@ -15,6 +16,7 @@ public abstract class Handler {
 
         Map<Integer, Integer> votes = new HashMap<>();
         Map<Integer, Integer> loves = new HashMap<>();
+        Map<Integer, String> nameMap = new LinkedHashMap<>();
 
         for (int i = 0; i < data.length(); i++) {
             JSONObject vote = data.getJSONObject(i);
@@ -44,6 +46,7 @@ public abstract class Handler {
                 JSONObject character = characters.getJSONObject(j);
                 Integer characterId = character.getInt("character_id");
                 String chnName = character.getString("chn_name");
+                nameMap.put(characterId, chnName);
                 builder.append(chnName);
                 builder.append("\n");
                 int voteCount = votes.getOrDefault(characterId, 0);
@@ -56,6 +59,50 @@ public abstract class Handler {
                 builder.append("\n\n");
             }
         }
+
+        Map<String, Integer> voteMap = new LinkedHashMap<>();
+
+        Integer[] characterIds = nameMap.keySet().toArray(new Integer[0]);
+        for (int i = 0; i < characterIds.length; i++) {
+            for (int j = i + 1; j < characterIds.length; j++) {
+                Integer characterId1 = characterIds[i];
+                Integer characterId2 = characterIds[j];
+                for (int k = 0; k < data.length(); k++) {
+                    JSONObject vote = data.getJSONObject(k);
+                    String[] split = vote.getString("character_ids").split(",");
+                    if (vote.getInt("type") == 0) {
+                        int voteCount = 0;
+                        for (String characterId : split) {
+                            int id = Integer.parseInt(characterId);
+                            if (id == characterId1) {
+                                voteCount++;
+                            }
+                            if (id == characterId2) {
+                                voteCount++;
+                            }
+                        }
+                        if (voteCount == 2) {
+                            String key = characterId1 + "," + characterId2;
+                            voteMap.put(key, voteMap.getOrDefault(key, 0) + 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        builder.append("====连记票分析====");
+        builder.append("\n");
+        voteMap.forEach((k, v) -> {
+            String[] split = k.split(",");
+            String name1 = nameMap.get(Integer.parseInt(split[0]));
+            String name2 = nameMap.get(Integer.parseInt(split[1]));
+            builder.append(name1);
+            builder.append(" + ");
+            builder.append(name2);
+            builder.append(" = ");
+            builder.append(v);
+            builder.append("\n");
+        });
 
         return builder.toString();
     }
