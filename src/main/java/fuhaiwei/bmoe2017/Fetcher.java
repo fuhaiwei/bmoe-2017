@@ -81,7 +81,7 @@ public abstract class Fetcher {
                 String pathname = String.format("bmoe-json/%s/page/%05d.txt", date, page);
                 File file = new File(pathname);
                 String jsonText;
-                if (!file.exists() || !Handler.isFullData(jsonText = FileUtil.readText(pathname))) {
+                if (!file.exists() || !isFullData(jsonText = FileUtil.readText(pathname))) {
                     jsonText = Jsoup.connect(String.format(url, page))
                             .ignoreContentType(true)
                             .timeout(3000)
@@ -119,4 +119,13 @@ public abstract class Fetcher {
         return array;
     }
 
+    private static boolean isFullData(String jsonText) {
+        JSONObject root = new JSONObject(jsonText);
+        if (root.getInt("code") == 0 && "success".equals(root.getString("message"))) {
+            if (root.getJSONArray("result").length() == 50) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

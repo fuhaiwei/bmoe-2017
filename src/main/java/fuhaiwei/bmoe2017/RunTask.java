@@ -7,6 +7,11 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static fuhaiwei.bmoe2017.Fetcher.fetchCurrent;
+import static fuhaiwei.bmoe2017.Fetcher.fetchData;
+import static fuhaiwei.bmoe2017.FileUtil.writeText;
+import static fuhaiwei.bmoe2017.Handler.handleData;
+
 public class RunTask {
 
     public static final DateTimeFormatter DATE_FORMATTER;
@@ -18,19 +23,19 @@ public class RunTask {
     }
 
     public static void main(String[] args) {
-        JSONObject current = Fetcher.fetchCurrent();
+        JSONObject current = fetchCurrent();
         if (current != null) {
             String date = DATE_FORMATTER.format(LocalDateTime.now());
-            FileUtil.writeText(current.toString(), new File(String.format("bmoe-json/%s/current.txt", date)));
+            writeText(current.toString(), new File(String.format("bmoe-json/%s/current.txt", date)));
 
-            JSONArray data = Fetcher.fetchData();
+            JSONArray data = fetchData();
             String dataText = data.toString();
 
             String datetime = DATE_TIME_FORMATTER.format(LocalDateTime.now());
-            FileUtil.writeText(dataText, new File(String.format("bmoe-json/%s.txt", datetime)));
+            writeText(dataText, new File(String.format("bmoe-json/%s.txt", datetime)));
 
-            String output = Handler.handleData(current, data);
-            FileUtil.writeText(output, new File(String.format("bmoe-data/%s.txt", datetime)));
+            String output = handleData(current, data);
+            writeText(output, new File(String.format("bmoe-data/%s.txt", datetime)));
         }
     }
 

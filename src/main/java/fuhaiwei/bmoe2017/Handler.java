@@ -60,14 +60,4 @@ public abstract class Handler {
         return builder.toString();
     }
 
-    public static boolean isFullData(String jsonText) {
-        JSONObject root = new JSONObject(jsonText);
-        if (root.getInt("code") == 0 && "success".equals(root.getString("message"))) {
-            if (root.getJSONArray("result").length() == 50) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }
