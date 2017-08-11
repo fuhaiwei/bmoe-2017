@@ -78,7 +78,7 @@ public abstract class Fetcher {
         while (true) {
             try {
                 String date = DATE_FORMATTER.format(LocalDateTime.now());
-                String pathname = String.format("bmoe-json/%s/page/%05d.txt", date, page);
+                String pathname = String.format("data/%s/page/%05d.txt", date, page);
                 File file = new File(pathname);
                 String jsonText;
                 if (!file.exists() || !isFullData(jsonText = FileUtil.readText(pathname))) {
