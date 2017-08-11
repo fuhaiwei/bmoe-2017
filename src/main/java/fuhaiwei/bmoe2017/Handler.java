@@ -3,10 +3,13 @@ package fuhaiwei.bmoe2017;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
+
+import static fuhaiwei.bmoe2017.FileUtil.writeText;
 
 public abstract class Handler {
 
@@ -91,37 +94,34 @@ public abstract class Handler {
             }
         }
 
-        builder.append("====连记票分析====");
-        builder.append("\n");
-        voteMap.forEach((k, v) -> {
-            String[] split = k.split(",");
-            String name1 = nameMap.get(Integer.parseInt(split[0]));
-            String name2 = nameMap.get(Integer.parseInt(split[1]));
-            builder.append(name1);
-            builder.append(" + ");
-            builder.append(name2);
-            builder.append(" = ");
-            builder.append(v);
-            builder.append("\n");
-        });
+        StringBuilder builder2 = new StringBuilder();
+        builder2.append("====连记票分析====");
+        builder2.append("\n");
+        voteMap.forEach((k, v) -> handleRow(nameMap, builder2, k, v));
+        writeText(builder2.toString(), new File("output/output.txt"));
 
         Map<String, Integer> treeMap = new TreeMap<>((k1, k2) -> voteMap.get(k2) - voteMap.get(k1));
         treeMap.putAll(voteMap);
-        System.out.print("====连记票分析====");
-        System.out.print("\n");
-        treeMap.forEach((k, v) -> {
-            String[] split = k.split(",");
-            String name1 = nameMap.get(Integer.parseInt(split[0]));
-            String name2 = nameMap.get(Integer.parseInt(split[1]));
-            System.out.print(name1);
-            System.out.print(" + ");
-            System.out.print(name2);
-            System.out.print(" = ");
-            System.out.print(v);
-            System.out.print("\n");
-        });
+
+        StringBuilder builder3 = new StringBuilder();
+        builder3.append("====连记票分析====");
+        builder3.append("\n");
+        treeMap.forEach((k, v) -> handleRow(nameMap, builder3, k, v));
+        writeText(builder3.toString(), new File("output/output-sort.txt"));
 
         return builder.toString();
+    }
+
+    private static void handleRow(Map<Integer, String> nameMap, StringBuilder builder2, String k, Integer v) {
+        String[] split = k.split(",");
+        String name1 = nameMap.get(Integer.parseInt(split[0]));
+        String name2 = nameMap.get(Integer.parseInt(split[1]));
+        builder2.append(name1);
+        builder2.append(" + ");
+        builder2.append(name2);
+        builder2.append(" = ");
+        builder2.append(v);
+        builder2.append("\n");
     }
 
 }

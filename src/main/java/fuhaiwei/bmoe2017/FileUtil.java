@@ -8,6 +8,13 @@ import java.nio.file.Files;
 
 public abstract class FileUtil {
 
+    public static void renameTo(String from, String to) {
+        File file = new File(from);
+        if (file.exists()) {
+            file.renameTo(new File(to));
+        }
+    }
+
     public static String readText(String pathname) throws IOException {
         return Files.readAllLines(new File(pathname).toPath()).get(0);
     }

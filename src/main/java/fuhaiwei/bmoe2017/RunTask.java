@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 import static fuhaiwei.bmoe2017.Fetcher.fetchCurrent;
 import static fuhaiwei.bmoe2017.Fetcher.fetchData;
+import static fuhaiwei.bmoe2017.FileUtil.renameTo;
 import static fuhaiwei.bmoe2017.FileUtil.writeText;
 import static fuhaiwei.bmoe2017.Handler.handleData;
 
@@ -23,19 +24,21 @@ public class RunTask {
     }
 
     public static void main(String[] args) {
+        renameTo("bmoe-json", "data");
+        renameTo("bmoe-data", "output");
         JSONObject current = fetchCurrent();
         if (current != null) {
             String date = DATE_FORMATTER.format(LocalDateTime.now());
-            writeText(current.toString(), new File(String.format("bmoe-json/%s/current.txt", date)));
+            writeText(current.toString(), new File(String.format("data/%s/current.txt", date)));
 
             JSONArray data = fetchData();
             String dataText = data.toString();
 
             String datetime = DATE_TIME_FORMATTER.format(LocalDateTime.now());
-            writeText(dataText, new File(String.format("bmoe-json/%s.txt", datetime)));
+            writeText(dataText, new File(String.format("data/%s.txt", datetime)));
 
             String output = handleData(current, data);
-            writeText(output, new File(String.format("bmoe-data/%s.txt", datetime)));
+            writeText(output, new File(String.format("output/%s.txt", datetime)));
         }
         System.out.println("Done!");
     }
