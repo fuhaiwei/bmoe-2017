@@ -24,8 +24,6 @@ public class RunTask {
     }
 
     public static void main(String[] args) {
-        renameTo("bmoe-json", "data");
-        renameTo("bmoe-data", "output");
         JSONObject current = fetchCurrent();
         if (current != null) {
             String date = DATE_FORMATTER.format(LocalDateTime.now());
