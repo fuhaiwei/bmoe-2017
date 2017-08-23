@@ -49,7 +49,7 @@ public abstract class Fetcher {
         AtomicInteger count = new AtomicInteger(threadCount);
         JSONArray array = new JSONArray();
         for (int i = 0; i < threadCount; i++) {
-            int finalI = i;
+            int finalI = i + 1;
             new Thread(() -> {
                 JSONArray data = fetchData(finalI, threadCount);
                 synchronized (array) {
